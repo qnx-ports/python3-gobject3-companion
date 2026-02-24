@@ -1,0 +1,46 @@
+# Alpine-Contributor: Rasmus Thomsen <oss@cogitri.dev>
+# Alpine-Maintainer: team/gnome <achill@achill.org>
+# Maintainer: Elliott Mazzuca <emazzuca@qnx.com>
+pkgname=python3-gobject3
+pkgver=3.54.5
+pkgrel=0
+pkgdesc="Python bindings for the GObject library"
+url="https://pygobject.gnome.org"
+arch="all"
+license="LGPL-2.1-or-later"
+makedepends="
+    glib-dev
+    gobject-introspection-dev
+    libffi-dev
+    meson
+    python3-cairo-dev
+    python3-setuptools
+    python3-dev
+    "
+checkdepends="python3-pytest gtk3-dev xvfb-run ibus font-dejavu"
+depends="gobject-introspection python3"
+subpackages="$pkgname-dev"
+options="!check" # Need ibus which is in community/
+source="https://download.gnome.org/sources/pygobject/${pkgver%.*}/pygobject-$pkgver.tar.gz"
+builddir="$srcdir"/pygobject-$pkgver
+
+build() {
+    abuild-meson \
+        -Db_lto=false \
+        -Dpycairo=enabled \
+        . output
+
+    meson compile -C output
+}
+
+check() {
+    PYGI_TEST_VERBOSE="1" xvfb-run -a meson test --print-errorlogs -C output
+}
+
+package() {
+    DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+0036068922de03dfa15335b29eb27a9cfd85310b66eae4eb6cb895c427a9fbf3c65462930e981f03b9394bede6fe97639e0bdbee640373188a9c51ad03b65041  pygobject-3.54.5.tar.gz
+"
