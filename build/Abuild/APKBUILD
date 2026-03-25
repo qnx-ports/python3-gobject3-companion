@@ -3,7 +3,7 @@
 # Maintainer: Elliott Mazzuca <emazzuca@qnx.com>
 pkgname=python3-gobject3
 pkgver=3.54.5
-pkgrel=${pkgrel:-0}
+pkgrel=0
 pkgdesc="Python bindings for the GObject library"
 url="https://pygobject.gnome.org"
 arch="all"
@@ -41,7 +41,6 @@ package() {
     DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
-options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 0036068922de03dfa15335b29eb27a9cfd85310b66eae4eb6cb895c427a9fbf3c65462930e981f03b9394bede6fe97639e0bdbee640373188a9c51ad03b65041  pygobject-3.54.5.tar.gz
 "
